@@ -17,12 +17,12 @@ const StyledButton = styled.button<{ $primary: boolean, $secondary: boolean, $ou
               return `
                   background: none;
                   color: ${color};
-                  border: 1px solid ${color};
+                  outline: 2px solid ${color};
                 `
             } else {
               return `
-                    background: ${color};
-                    color: ${readableColor(color)};
+                  background: ${color};
+                  color: ${readableColor(color)};
                 `
             }
           }
@@ -31,8 +31,8 @@ const StyledButton = styled.button<{ $primary: boolean, $secondary: boolean, $ou
   font-size: 1.25rem;
   font-weight: 600;
 
-  padding: .5rem;
-  padding-inline: 1rem;
+  padding: .6rem;
+  padding-inline: 1.2rem;
 
   cursor: pointer;
 

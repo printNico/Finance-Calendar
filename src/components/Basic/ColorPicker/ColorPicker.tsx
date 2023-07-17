@@ -1,18 +1,29 @@
-import styled from "styled-components";
+import IconButton from "@/components/Basic/Button/IconButton";
 import TextField from "@/components/Basic/TextField/TextField";
+import useClickedOutsideEvent from "@/lib/useClickedOutsideEvent";
 import {useEffect, useRef, useState} from "react";
 import {ChromePicker, ColorResult} from 'react-color';
-import useClickedOutsideEvent from "@/lib/useClickedOutsideEvent";
+import {MdColorLens} from "react-icons/md";
+import styled from "styled-components";
 
 
 const StyledColorPickerWrapper = styled.div`
   position: relative;
 `
 
-const StyledTextField = styled(TextField)`
+const StyledCurrentColor = styled.div<{ $color: string }>`
+  width: 2rem;
+  aspect-ratio: 1/1;
+
+  border-radius: 25%;
+
+  margin-left: .5rem;
+
+  background: ${props => props.$color};
 `
 
-const StyledColorPickerContainer = styled.div`
+const StyledColorPickerButton = styled(IconButton)`
+  margin-right: .5rem;
 `
 
 const StyledChromePicker = styled(ChromePicker)`
@@ -20,15 +31,14 @@ const StyledChromePicker = styled(ChromePicker)`
 
   z-index: 1;
 
-  top: 0;
-  left: 0;
+  top: 100%;
+  right: 0;
 `
 
 type ColorPickerProps = {
     color?: string;
     onColorChange?: (color: string) => void;
 }
-
 
 const ColorPicker = (props: ColorPickerProps) => {
     const [showColorPicker, setShowColorPicker] = useState(false);
@@ -55,21 +65,29 @@ const ColorPicker = (props: ColorPickerProps) => {
 
     return (
         <>
-            <StyledColorPickerWrapper ref={wrapperRef}>
-                <StyledTextField
+            <StyledColorPickerWrapper>
+                <TextField
                     label="Farbe"
                     value={localColor}
-                    onClick={() => setShowColorPicker(!showColorPicker)}
+                    prepends={<StyledCurrentColor $color={localColor}/>}
+                    appends={
+                        <StyledColorPickerButton
+                            onClick={() => setShowColorPicker(!showColorPicker)}
+                            Icon={
+                                <MdColorLens
+                                    size="24px"
+                                />}
+                        />}
                 />
 
                 {showColorPicker && (
-                    <StyledColorPickerContainer>
+                    <div ref={wrapperRef}>
                         <StyledChromePicker
                             color={localColor}
                             onChangeComplete={onColorChangeEvent}
                             disableAlpha
                         />
-                    </StyledColorPickerContainer>
+                    </div>
                 )}
             </StyledColorPickerWrapper>
         </>

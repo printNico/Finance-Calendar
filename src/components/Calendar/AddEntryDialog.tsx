@@ -1,5 +1,6 @@
 "use client"
 
+import NumberField from "@/components/Basic/NumberField/NumberField";
 import {Dialog} from "@headlessui/react";
 import styled from "styled-components";
 import {rgba} from "polished";
@@ -42,7 +43,7 @@ const StyledCard = styled(Card)`
 const StyledH1 = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
-  
+
   margin-bottom: 1rem;
 `
 
@@ -52,9 +53,9 @@ const StyledHr = styled.hr`
 `
 
 const StyledContentContainer = styled.div`
-    div:not(:last-child) {
-        margin-bottom: 1rem;
-    }
+  > div:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 `
 
 const StyledActionContainer = styled.div`
@@ -63,7 +64,7 @@ const StyledActionContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  
+
   button:not(:last-child) {
     margin-right: 1rem;
   }
@@ -78,14 +79,16 @@ type DialogProps = {
 const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
     const [title, setTitle] = useState("");
     const [color, setColor] = useState("#ffff00");
+    const [amount, setAmount] = useState<number>();
+    const [additive, setAdditive] = useState(true);
 
     const onCloseEvent = () => {
         if (props.onClose) props.onClose();
     }
 
     const onAddEntryEvent = () => {
-        if(!title || title === "") return;
-        if(!color || color === "") return;
+        if (!title || title === "") return;
+        if (!color || color === "") return;
 
         const newEntry: Entry = {
             title: title,
@@ -115,6 +118,18 @@ const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
                     <ColorPicker
                         color={color}
                         onColorChange={setColor}
+                    />
+
+                    <NumberField
+                        label="Amount"
+                        placeholder="25"
+                        min={1}
+                        steps="any"
+                        value={amount}
+                        onValueChange={(n) => {
+                            setAmount(n);
+                            console.log(n)
+                        }}
                     />
                 </StyledContentContainer>
                 <StyledActionContainer>

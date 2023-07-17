@@ -1,5 +1,6 @@
+import {ReactElement, useEffect, useState} from "react";
 import styled from "styled-components";
-import {ReactElement, ReactNode, useEffect, useState} from "react";
+import {set} from "zod";
 
 const StyledInputWrapper = styled.div`
   display: flex;
@@ -51,19 +52,23 @@ const StyledInput = styled.input`
   }
 `
 
-type TextFieldProps = {
+type NumberFieldProps = {
     label?: string
     value?: string
     placeholder?: string
-    onValueChange?: (value: string) => void
+    min?: number
+    max?: number
+    steps?: number | string
+
+    onValueChange?: (value: number) => void
     onClick?: () => void
 
     prepends?: ReactElement
     appends?: ReactElement
 }
 
-const TextField = (props: TextFieldProps) => {
-    const [localValue, setLocalValue] = useState("");
+const NumberField = (props: NumberFieldProps) => {
+    const [localValue, setLocalValue] = useState<string>("");
 
     const onClickEvent = () => {
         if (props.onClick) {
@@ -72,29 +77,46 @@ const TextField = (props: TextFieldProps) => {
     }
 
     const onValueChangeEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.value;
-        if (props.onValueChange) {
-            if (newValue !== props.value) {
-                props.onValueChange(newValue);
+        const rawValue = event.target.value;
+        const trimmedValue = rawValue.replaceAll("^0", "");
+
+        if (!trimmedValue.match(/^[0-9]*(\.[0-9]{1,2})?$/)) {
+            setLocalValue(localValue);
+            return;
+        }
+
+        const parsedValue = parseFloat(trimmedValue);
+
+        if (!isNaN(parsedValue)) {
+            if (parsedValue !== props.value) {
+                if (props.onValueChange) props.onValueChange(parsedValue)
             }
         }
+
+        // @ts-ignore
+        setLocalValue(rawValue);
     }
 
     useEffect(() => {
-        setLocalValue(props.value || "")
-    }, [props.value]);
+        if (props.value) setLocalValue(props.value);
+    }, [props.value, props.min]);
 
     return (
         <StyledInputWrapper onClick={onClickEvent}>
-            <StyledInputLabel aria-label={props.label}>
-                {props.label}
-            </StyledInputLabel>
+            {props.label && (
+                <StyledInputLabel aria-label={props.label}>
+                    {props.label}
+                </StyledInputLabel>
+            )}
 
             <StyledInputContainer>
                 {props.prepends}
                 <StyledInput
                     value={localValue}
-                    type="text"
+                    pattern="[0-9,\.]*"
+                    min={props.min}
+                    max={props.max}
+                    step={props.steps}
                     placeholder={props.placeholder}
                     onChange={onValueChangeEvent}
                 />
@@ -103,5 +125,4 @@ const TextField = (props: TextFieldProps) => {
         </StyledInputWrapper>
     )
 }
-
-export default TextField
+export default NumberField;

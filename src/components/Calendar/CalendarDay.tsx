@@ -24,12 +24,20 @@ const StyledContentContainer = styled.div`
 
 `
 
+const StyledAddButton = styled(IconButton)`
+  transition: opacity 0.5s ease-out;
+  
+  opacity: 0;
+
+  &:hover {
+    opacity: 1 !important;
+  }
+`
+
 const StyledActionsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-end;
-
-  opacity: 0.1;
 `
 
 const StyledCardCalendar = styled(Card)`
@@ -43,11 +51,13 @@ const StyledCardCalendar = styled(Card)`
   border-radius: 5px;
 
   &:hover {
-    ${StyledActionsContainer} {
-      opacity: 1;
+    ${StyledAddButton} {
+      opacity: 0.4;
     }
   }
 `
+
+
 
 const StyledDayEntry = styled.div<{ $color: string }>`
   background: ${props => props.$color};
@@ -116,7 +126,7 @@ const CalendarDay = (props: CalendarDayProps) => {
                     </StyledContentContainer>
                 </div>
                 <StyledActionsContainer>
-                    <IconButton
+                    <StyledAddButton
                         Icon={<MdAddCircleOutline size='24px'/>}
                         onClick={onAddButtonClickEvent}
                     />
