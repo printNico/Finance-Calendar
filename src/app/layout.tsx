@@ -5,6 +5,7 @@ import FCThemeProvider from "@/lib/StyledComponents/FCThemeProvider";
 import {ReactNode} from "react";
 import FCGlobalStyle from "@/lib/StyledComponents/FCGlobalStyle";
 import TimeSelectionProvider from "@/lib/Calendar/TimeSelectionProvider";
+import ReduxStoreProvider from "@/lib/ReduxStoreProvider";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -24,12 +25,14 @@ const RootLayout = ({children}: RootLayoutProps) => {
         <StyledComponentsRegistry>
             <FCThemeProvider>
                 <FCGlobalStyle/>
-                <TimeSelectionProvider>
-                    {/*Main Content Area*/}
-                    <main>
-                        {children}
-                    </main>
-                </TimeSelectionProvider>
+                <ReduxStoreProvider>
+                    <TimeSelectionProvider>
+                        {/*Main Content Area*/}
+                        <main>
+                            {children}
+                        </main>
+                    </TimeSelectionProvider>
+                </ReduxStoreProvider>
             </FCThemeProvider>
         </StyledComponentsRegistry>
         </body>

@@ -3,6 +3,12 @@ import styled from "styled-components";
 import {DayOfMonth} from "@/lib/Calendar/useDaysOfMonth";
 import IconButton from "@/components/Basic/Button/IconButton";
 import {MdAddCircleOutline} from "react-icons/md";
+import {useDispatch, useSelector} from "react-redux";
+import {addEntry, selectEntriesWithDate} from "@/store/entriesSlice";
+import {Entry} from "@/lib/types/Entry";
+import {RootState} from "@/store/store";
+import AddEntryDialog from "@/components/Calendar/AddEntryDialog";
+import {useState} from "react";
 
 const StyledContentContainer = styled.div`
 
@@ -38,22 +44,30 @@ type CalendarDayProps = {
 }
 
 const CalendarDay = (props: CalendarDayProps) => {
+    const dispatch = useDispatch();
+    const entries = useSelector((state: RootState) => selectEntriesWithDate(state, props.day));
+
+    const [showCreationDialog, setShowCreationDialog] = useState(false);
+
     const onCardClickEvent = () => {
         if (props.onClick) props.onClick();
     }
 
     const onAddButtonClickEvent = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation();
+        setShowCreationDialog(true);
     }
 
     return (
         <>
+            <AddEntryDialog show={showCreationDialog} onClose={() => setShowCreationDialog(false)}/>
             <StyledCard
                 className={props.className}
                 onClick={onCardClickEvent}
             >
                 <StyledContentContainer>
                     {props.day.date.getDate()}
+                    {entries.map((entry, index) => <p key={index}>{entry.id}</p>)}
                 </StyledContentContainer>
                 <StyledActionsContainer>
                     <IconButton

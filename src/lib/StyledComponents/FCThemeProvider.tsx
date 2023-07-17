@@ -7,6 +7,7 @@ export interface FCTheme {
     colors: {
         primary: string
         secondary: string
+        noColor: string
 
         background1: string
         background2: string
@@ -27,8 +28,9 @@ declare module 'styled-components' {
 
 const darkTheme: FCTheme = {
     colors: {
-        primary: '#ff0000',
-        secondary: '#00ff00',
+        primary: '#a7b812',
+        secondary: '#088985',
+        noColor: '#aaaaaa',
 
         background1: '#000000',
         background2: '#111111',
@@ -45,8 +47,9 @@ const darkTheme: FCTheme = {
 
 const lightTheme: FCTheme = {
     colors: {
-        primary: '#0000ff',
-        secondary: '#ff00ff',
+        primary: '#a7b812',
+        secondary: '#088985',
+        noColor: '#aaaaaa',
 
         background1: '#ffffff',
         background2: '#eeeeee',
