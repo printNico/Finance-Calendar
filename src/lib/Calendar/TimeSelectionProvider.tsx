@@ -1,5 +1,6 @@
 "use client"
 
+import {getDaysOfMonth} from "@/lib/Calendar/useDaysOfMonth";
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 
 type TimeSelectionContext = {
@@ -17,13 +18,19 @@ type TimeSelectionContext = {
 const DefaultTimeSelectionContext: TimeSelectionContext = {
     selectedDate: new Date(),
 
-    selectYear: (year: number) => {},
-    selectMonth: (month: number) => {},
-    selectDay: (day: number) => {},
+    selectYear: (year: number) => {
+    },
+    selectMonth: (month: number) => {
+    },
+    selectDay: (day: number) => {
+    },
 
-    moveByYear: (year: number) => {},
-    moveByMonth: (month: number) => {},
-    moveByDay: (day: number) => {}
+    moveByYear: (year: number) => {
+    },
+    moveByMonth: (month: number) => {
+    },
+    moveByDay: (day: number) => {
+    }
 }
 
 const TimeSelectionContext = createContext<TimeSelectionContext>(DefaultTimeSelectionContext);
@@ -49,13 +56,19 @@ const TimeSelectionProvider = (props: TimeSelectionProviderProps) => {
     const selectMonth = (month: number) => {
         if(month < 1 || month > 12) return;
 
-        const date = new Date(selectedDate);
+        const date = new Date(selectedDate.getFullYear(), selectedDate.getMonth());
         date.setMonth(month - 1);
+
+        if(getDaysOfMonth(date) < selectedDate.getDate())
+            date.setDate(getDaysOfMonth(date))
+        else
+            date.setDate(selectedDate.getDate())
+
         setSelectedDate(date);
     }
 
     const selectDay = (day: number) => {
-        if(day < 1 || day > 31) return;
+        if (day < 1 || day > 31) return;
 
         const date = new Date(selectedDate);
         date.setDate(day);
@@ -70,14 +83,19 @@ const TimeSelectionProvider = (props: TimeSelectionProviderProps) => {
     }
 
     const moveByMonth = (month: number) => {
-        const date = new Date(selectedDate);
+        const date = new Date(selectedDate.getFullYear(), selectedDate.getMonth());
         date.setMonth(date.getMonth() + month);
+
+        if(getDaysOfMonth(date) < selectedDate.getDate())
+            date.setDate(getDaysOfMonth(date))
+        else
+            date.setDate(selectedDate.getDate())
 
         setSelectedDate(date);
     }
 
     const moveByDay = (day: number) => {
-        const date = new Date(selectedDate);
+        const date = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
         date.setDate(date.getDate() + day);
 
         setSelectedDate(date);

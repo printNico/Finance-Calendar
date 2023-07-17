@@ -29,4 +29,9 @@ const useDaysOfMonth = (): DayOfMonth[] => {
     return daysOfMonth;
 }
 
+export const getDaysOfMonth = (date: Date): number => {
+    const tempDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+    return tempDate.getDate();
+}
+
 export default useDaysOfMonth;
