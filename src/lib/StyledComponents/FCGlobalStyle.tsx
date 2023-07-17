@@ -3,7 +3,7 @@
 import {createGlobalStyle} from "styled-components";
 import {readableColor} from "polished";
 
-const GlobalStyle = createGlobalStyle`
+const FCGlobalStyle = createGlobalStyle`
   body {
     blockquote,
     dl,
@@ -67,13 +67,5 @@ const GlobalStyle = createGlobalStyle`
     color: ${props => readableColor(props.theme.colors.background1)};
   }
 `
-
-const FCGlobalStyle = () => {
-    return (
-        <>
-            <GlobalStyle/>
-        </>
-    )
-}
 
 export default FCGlobalStyle;

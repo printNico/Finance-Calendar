@@ -1,30 +1,8 @@
 "use client"
 
+import {FCTheme} from "@/lib/StyledComponents/types/FCTheme";
 import {ReactNode} from "react";
 import {ThemeProvider} from "styled-components";
-
-export interface FCTheme {
-    colors: {
-        primary: string
-        secondary: string
-        noColor: string
-
-        background1: string
-        background2: string
-        background3: string
-    },
-    breakpoints: {
-        xs: string
-        sm: string
-        md: string
-        lg: string
-        xl: string
-    }
-}
-
-declare module 'styled-components' {
-    export interface DefaultTheme extends FCTheme {}
-}
 
 const darkTheme: FCTheme = {
     colors: {

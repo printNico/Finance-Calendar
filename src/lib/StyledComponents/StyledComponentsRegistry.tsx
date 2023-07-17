@@ -5,10 +5,10 @@ import {ReactNode, useState} from "react";
 import {ServerStyleSheet, StyleSheetManager} from "styled-components";
 
 type StyledComponentsRegistryProps = {
-    children?: ReactNode
+    children: ReactNode
 }
 
-const StyledComponentsRegistry = (props: StyledComponentsRegistryProps) => {
+const StyledComponentsRegistry = ({children}: StyledComponentsRegistryProps) => {
     // Only create stylesheet once with lazy initial state
     // x-ref: https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
     const [styledComponentsStyleSheet] = useState(() => new ServerStyleSheet())
@@ -19,11 +19,11 @@ const StyledComponentsRegistry = (props: StyledComponentsRegistryProps) => {
         return <>{styles}</>
     })
 
-    if (typeof window !== 'undefined') return <>{props.children}</>
+    if (typeof window !== 'undefined') return <>{children}</>
 
     return (
         <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>
-            {props.children}
+            {children}
         </StyleSheetManager>
     )
 }

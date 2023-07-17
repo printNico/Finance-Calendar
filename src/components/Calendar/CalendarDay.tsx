@@ -32,7 +32,7 @@ const StyledActionsContainer = styled.div`
   opacity: 0.1;
 `
 
-const StyledCard = styled(Card)`
+const StyledCardCalendar = styled(Card)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -99,7 +99,7 @@ const CalendarDay = (props: CalendarDayProps) => {
                 onAdd={onAddEntryEvent}
                 onClose={() => setShowCreationDialog(false)}
             />
-            <StyledCard
+            <StyledCardCalendar
                 className={props.className}
                 onClick={onCardClickEvent}
             >
@@ -121,7 +121,7 @@ const CalendarDay = (props: CalendarDayProps) => {
                         onClick={onAddButtonClickEvent}
                     />
                 </StyledActionsContainer>
-            </StyledCard>
+            </StyledCardCalendar>
         </>
     )
 }

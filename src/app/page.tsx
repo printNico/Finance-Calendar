@@ -1,17 +1,17 @@
 import Calendar from "@/components/Calendar/Calendar";
 import TimeSelector from "@/components/TimeSelector/TimeSelector";
 
-type HomePageProps = {
-
-}
-
-const HomePage = (props: HomePageProps) => {
-  return (
-    <div>
-        <TimeSelector/>
-      <Calendar/>
-    </div>
-  )
+const HomePage = () => {
+    return (
+        <div>
+            <div>
+                <TimeSelector/>
+            </div>
+            <div>
+                <Calendar/>
+            </div>
+        </div>
+    )
 }
 
 export default HomePage;
