@@ -22,12 +22,12 @@ const StyledButton = styled.button`
 type IconButtonProps = {
     className?: string
     Icon: ReactElement
-    onClick?: () => void
+    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
 const IconButton = (props: IconButtonProps) => {
-    const onClickEvent = () => {
-        if(props.onClick) props.onClick();
+    const onClickEvent = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (props.onClick) props.onClick(event);
     }
 
     return (

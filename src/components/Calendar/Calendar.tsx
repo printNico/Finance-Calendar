@@ -8,6 +8,7 @@ import {useTimeSelectionContext} from "@/lib/Calendar/TimeSelectionProvider";
 const StyledContainerGrid = styled.div`
   display: grid;
 
+  gap: 10px;
   grid-template-columns: repeat(7, 1fr);
 
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
@@ -18,10 +19,10 @@ const StyledContainerGrid = styled.div`
 const StyledCalendarDay = styled(CalendarDay)<{$activeDay: boolean}>`
   grid-column: ${props => props.day.date.getDay()};
 
-  height: 200px
+  aspect-ratio: 1/1;
   
   ${props => props.$activeDay && `
-    background: red
+    border-color: ${props.theme.colors.primary}
   `};
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
@@ -32,12 +33,16 @@ const StyledCalendarDay = styled(CalendarDay)<{$activeDay: boolean}>`
 type CalendarProps = {}
 
 const Calendar = (props: CalendarProps) => {
-    const {selectedDate} = useTimeSelectionContext();
+    const {selectedDate, selectDay} = useTimeSelectionContext();
     const days = useDaysOfMonth();
 
     const isActiveDay = (day: DayOfMonth) => {
         if(!selectedDate) return false;
         return day.date.toDateString() === selectedDate.toDateString();
+    }
+
+    const setActiveDay = (day: DayOfMonth) => {
+        selectDay(day.date.getDate())
     }
 
     return (
@@ -47,6 +52,7 @@ const Calendar = (props: CalendarProps) => {
                     <StyledCalendarDay
                         key={day.date.toDateString() + index}
                         day={day}
+                        onClick={() => setActiveDay(day)}
                         $activeDay={isActiveDay(day)}
                     />
                 )}

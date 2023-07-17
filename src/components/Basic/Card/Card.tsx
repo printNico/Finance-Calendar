@@ -10,12 +10,17 @@ const StyledDiv = styled.div`
 type CardProps = {
     className?: string;
     children?: ReactNode;
+    onClick?: () => void;
 }
 
 const Card = (props: CardProps) => {
+    const onClickEvent = () => {
+        if(props.onClick) props.onClick();
+    }
+
     return (
         <>
-            <StyledDiv className={props.className}>
+            <StyledDiv className={props.className} onClick={onClickEvent}>
                 {props.children}
             </StyledDiv>
         </>
