@@ -1,9 +1,10 @@
-import './globals.css'
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
-import StyledRegistry from "@/lib/StyledComponents/StyledRegistry";
+import StyledComponentsRegistry from "@/lib/StyledComponents/StyledComponentsRegistry";
 import FCThemeProvider from "@/lib/StyledComponents/FCThemeProvider";
 import {ReactNode} from "react";
+import FCGlobalStyle from "@/lib/StyledComponents/FCGlobalStyle";
+import TimeSelectionProvider from "@/lib/Calendar/TimeSelectionProvider";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -20,14 +21,17 @@ const RootLayout = ({children}: RootLayoutProps) => {
     return (
         <html lang="en">
         <body className={inter.className}>
-        <StyledRegistry>
+        <StyledComponentsRegistry>
             <FCThemeProvider>
-                {/*Main Content Area*/}
-                <main>
-                    {children}
-                </main>
+                <FCGlobalStyle/>
+                <TimeSelectionProvider>
+                    {/*Main Content Area*/}
+                    <main>
+                        {children}
+                    </main>
+                </TimeSelectionProvider>
             </FCThemeProvider>
-        </StyledRegistry>
+        </StyledComponentsRegistry>
         </body>
         </html>
     )
