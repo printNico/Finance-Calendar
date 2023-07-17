@@ -9,6 +9,16 @@ import {Entry} from "@/lib/types/Entry";
 import {RootState} from "@/store/store";
 import AddEntryDialog from "@/components/Calendar/AddEntryDialog";
 import {useState} from "react";
+import {readableColor} from "polished";
+
+const StyledHeaderContainer = styled.div`
+  font-size: .8rem;
+  font-weight: 600;
+
+  color: ${props => props.theme.colors.noColor};
+  
+  margin-bottom: .4rem;
+`
 
 const StyledContentContainer = styled.div`
 
@@ -27,6 +37,8 @@ const StyledCard = styled(Card)`
   flex-direction: column;
   justify-content: space-between;
 
+  padding: .5rem;
+
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px;
 
@@ -35,6 +47,22 @@ const StyledCard = styled(Card)`
       opacity: 1;
     }
   }
+`
+
+const StyledDayEntry = styled.div<{ $color: string }>`
+  background: ${props => props.$color};
+  color: ${props => readableColor(props.$color)};
+
+  border-radius: 5px;
+
+  height: 1rem;
+  overflow: hidden;
+
+  font-size: .8rem;
+  font-weight: 600;
+
+  padding: .25rem;
+  margin-bottom: .25rem;
 `
 
 type CalendarDayProps = {
@@ -58,17 +86,35 @@ const CalendarDay = (props: CalendarDayProps) => {
         setShowCreationDialog(true);
     }
 
+    const onAddEntryEvent = (entry: Entry) => {
+        entry.date = props.day.date.valueOf();
+        dispatch(addEntry(entry));
+        setShowCreationDialog(false)
+    }
+
     return (
         <>
-            <AddEntryDialog show={showCreationDialog} onClose={() => setShowCreationDialog(false)}/>
+            <AddEntryDialog
+                show={showCreationDialog}
+                onAdd={onAddEntryEvent}
+                onClose={() => setShowCreationDialog(false)}
+            />
             <StyledCard
                 className={props.className}
                 onClick={onCardClickEvent}
             >
-                <StyledContentContainer>
-                    {props.day.date.getDate()}
-                    {entries.map((entry, index) => <p key={index}>{entry.id}</p>)}
-                </StyledContentContainer>
+                <div>
+                    <StyledHeaderContainer>
+                        {props.day.date.getDate()}.
+                    </StyledHeaderContainer>
+                    <StyledContentContainer>
+                        {entries.map((entry, index) =>
+                            <StyledDayEntry $color={entry.color} key={index}>
+                                {entry.title}
+                            </StyledDayEntry>
+                        )}
+                    </StyledContentContainer>
+                </div>
                 <StyledActionsContainer>
                     <IconButton
                         Icon={<MdAddCircleOutline size='24px'/>}

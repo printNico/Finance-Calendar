@@ -5,6 +5,12 @@ import styled from "styled-components";
 import {rgba} from "polished";
 import Card from "@/components/Basic/Card/Card";
 import Button from "@/components/Basic/Button/Button";
+import TextField from "@/components/Basic/TextField/TextField";
+import {useState} from "react";
+import ColorPicker from "@/components/Basic/ColorPicker/ColorPicker";
+import {Entry} from "@/lib/types/Entry";
+import {useDispatch} from "react-redux";
+import {addEntry} from "@/store/entriesSlice";
 
 const StyledDialog = styled(Dialog)`
   position: fixed;
@@ -33,7 +39,22 @@ const StyledCard = styled(Card)`
   flex-wrap: nowrap;
 
 `
+const StyledH1 = styled.h1`
+  font-size: 1.5rem;
+  font-weight: bold;
+  
+  margin-bottom: 1rem;
+`
+
+const StyledHr = styled.hr`
+  margin-inline: -1rem;
+  margin-bottom: 1rem;
+`
+
 const StyledContentContainer = styled.div`
+    div:not(:last-child) {
+        margin-bottom: 1rem;
+    }
 `
 
 const StyledActionContainer = styled.div`
@@ -51,22 +72,54 @@ const StyledActionContainer = styled.div`
 type DialogProps = {
     show: boolean;
     onClose?: () => void;
+    onAdd?: (entry: Entry) => void;
 }
 
 const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
+    const [title, setTitle] = useState("");
+    const [color, setColor] = useState("#ffff00");
+
     const onCloseEvent = () => {
         if (props.onClose) props.onClose();
+    }
+
+    const onAddEntryEvent = () => {
+        if(!title || title === "") return;
+        if(!color || color === "") return;
+
+        const newEntry: Entry = {
+            title: title,
+            color: color
+        } as Entry;
+
+        if (props.onAdd) props.onAdd(newEntry);
     }
 
     return (
         <StyledDialog open={show} onClose={onCloseEvent}>
             <StyledCard>
                 <StyledContentContainer>
-                    <h1>Test</h1>
+                    <StyledH1>
+                        Add new Entry
+                    </StyledH1>
+
+                    <StyledHr/>
+
+                    <TextField
+                        label="Title"
+                        placeholder="Versicherung"
+                        value={title}
+                        onValueChange={setTitle}
+                    />
+
+                    <ColorPicker
+                        color={color}
+                        onColorChange={setColor}
+                    />
                 </StyledContentContainer>
                 <StyledActionContainer>
                     <Button label="Cancel" onClick={onCloseEvent} $outlined/>
-                    <Button label="Add" $primary/>
+                    <Button label="Add" onClick={onAddEntryEvent} $primary/>
                 </StyledActionContainer>
             </StyledCard>
         </StyledDialog>

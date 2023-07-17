@@ -19,10 +19,14 @@
     "next": "13.4.10",
     "polished": "^4.2.2",
     "react": "18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
     "react-redux": "^8.1.1",
     "styled-components": "^6.0.4",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@types/react-color": "^3.0.6"
   }
 }
