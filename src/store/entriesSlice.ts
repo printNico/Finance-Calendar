@@ -1,5 +1,5 @@
 import {createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Entry} from "@/lib/types/Entry";
+import {Entry, EntryType} from "@/lib/types/Entry";
 import {DayOfMonth} from "@/lib/Calendar/useDaysOfMonth";
 import {RootState} from "@/store/store";
 
@@ -71,5 +71,19 @@ export const selectEntriesWithDate = createSelector(
     (entries, day: DayOfMonth) => entries.filter(entry => entry.date === day.date.valueOf())
 )
 
+
+export const selectRecurringEntries = createSelector(
+    [
+        (state: RootState) => state.entries.entries,
+        (state, day?: DayOfMonth) => day
+    ],
+    (entries, day?: DayOfMonth) => {
+        return entries.filter(entry => {
+            if (entry.type !== EntryType.recurring) return false;
+            if (!day) return true;
+            return entry.date <= day.date.valueOf()
+        })
+    }
+)
 export const {addEntry, editEntry, removeEntry} = entriesSlice.actions
 export default entriesSlice.reducer

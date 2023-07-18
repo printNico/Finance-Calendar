@@ -11,6 +11,7 @@ import AddEntryDialog from "@/components/Calendar/AddEntryDialog";
 import {useState} from "react";
 import {readableColor} from "polished";
 import EditEntryDialog from "@/components/Calendar/EditEntryDialog";
+import useEntriesForDay from "@/lib/Calendar/useEntriesForDay";
 
 const StyledHeaderContainer = styled.div`
   font-size: .8rem;
@@ -82,7 +83,7 @@ type CalendarDayProps = {
 
 const CalendarDay = (props: CalendarDayProps) => {
     const dispatch = useDispatch();
-    const entries = useSelector((state: RootState) => selectEntriesWithDate(state, props.day));
+    const entries = useEntriesForDay(props.day);
 
     const [showCreationDialog, setShowCreationDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState<Entry | undefined>(undefined);
