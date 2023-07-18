@@ -10,9 +10,9 @@ const darkTheme: FCTheme = {
         secondary: '#088985',
         noColor: '#aaaaaa',
 
-        background1: '#000000',
-        background2: '#111111',
-        background3: '#222222'
+        background1: '#141432',
+        background2: '#1f1f3e',
+        background3: '#2a2a54'
     },
     breakpoints: {
         xs: '0px',

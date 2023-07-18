@@ -8,7 +8,6 @@ import {useTimeSelectionContext} from "@/lib/Calendar/TimeSelectionProvider";
 const StyledContainerGrid = styled.div`
   display: grid;
 
-  gap: 10px;
   grid-template-columns: repeat(7, minmax(0, 1fr));
 
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
@@ -22,7 +21,7 @@ const StyledCalendarDay = styled(CalendarDay)<{$activeDay: boolean}>`
   aspect-ratio: 1/1;
   
   ${props => props.$activeDay && `
-    border-color: ${props.theme.colors.primary}
+    background-color: ${props.theme.colors.background3};
   `};
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
@@ -30,7 +29,9 @@ const StyledCalendarDay = styled(CalendarDay)<{$activeDay: boolean}>`
   }
 `
 
-type CalendarProps = {}
+type CalendarProps = {
+    className?: string
+}
 
 const Calendar = (props: CalendarProps) => {
     const {selectedDate, selectDay} = useTimeSelectionContext();
@@ -47,7 +48,7 @@ const Calendar = (props: CalendarProps) => {
 
     return (
         <>
-            <StyledContainerGrid>
+            <StyledContainerGrid className={props.className}>
                 {days.map((day, index) =>
                     <StyledCalendarDay
                         key={day.date.toDateString() + index}

@@ -60,6 +60,8 @@ const FCGlobalStyle = createGlobalStyle`
         border-top-width: 1px;
     }
 
+    margin: 0;
+    
     background: ${props => props.theme.colors.background1};
     
     font-family: Arial, Helvetica, sans-serif;

@@ -50,7 +50,6 @@ const StyledCardCalendar = styled(Card)`
   padding: .5rem;
 
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
 
   &:hover {
     ${StyledAddButton} {
@@ -62,8 +61,6 @@ const StyledCardCalendar = styled(Card)`
 const StyledDayEntry = styled.div<{ $color: string }>`
   background: ${props => props.$color};
   color: ${props => readableColor(props.$color)};
-
-  border-radius: 5px;
 
   height: 1rem;
   overflow: hidden;
