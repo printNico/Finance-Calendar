@@ -4,19 +4,20 @@ import {DayOfMonth} from "@/lib/Calendar/useDaysOfMonth";
 import IconButton from "@/components/Basic/Button/IconButton";
 import {MdAddCircleOutline} from "react-icons/md";
 import {useDispatch, useSelector} from "react-redux";
-import {addEntry, selectEntriesWithDate} from "@/store/entriesSlice";
+import {addEntry, editEntry, removeEntry, selectEntriesWithDate} from "@/store/entriesSlice";
 import {Entry} from "@/lib/types/Entry";
 import {RootState} from "@/store/store";
 import AddEntryDialog from "@/components/Calendar/AddEntryDialog";
 import {useState} from "react";
 import {readableColor} from "polished";
+import EditEntryDialog from "@/components/Calendar/EditEntryDialog";
 
 const StyledHeaderContainer = styled.div`
   font-size: .8rem;
   font-weight: 600;
 
   color: ${props => props.theme.colors.noColor};
-  
+
   margin-bottom: .4rem;
 `
 
@@ -26,7 +27,7 @@ const StyledContentContainer = styled.div`
 
 const StyledAddButton = styled(IconButton)`
   transition: opacity 0.5s ease-out;
-  
+
   opacity: 0;
 
   &:hover {
@@ -57,8 +58,6 @@ const StyledCardCalendar = styled(Card)`
   }
 `
 
-
-
 const StyledDayEntry = styled.div<{ $color: string }>`
   background: ${props => props.$color};
   color: ${props => readableColor(props.$color)};
@@ -86,6 +85,7 @@ const CalendarDay = (props: CalendarDayProps) => {
     const entries = useSelector((state: RootState) => selectEntriesWithDate(state, props.day));
 
     const [showCreationDialog, setShowCreationDialog] = useState(false);
+    const [showEditDialog, setShowEditDialog] = useState<Entry | undefined>(undefined);
 
     const onCardClickEvent = () => {
         if (props.onClick) props.onClick();
@@ -94,6 +94,21 @@ const CalendarDay = (props: CalendarDayProps) => {
     const onAddButtonClickEvent = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation();
         setShowCreationDialog(true);
+    }
+
+    const onEditButtonClickEvent = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, entry: Entry) => {
+        event.stopPropagation();
+        setShowEditDialog(entry);
+    }
+
+    const onEditEntryEvent = (entry: Entry) => {
+        dispatch(editEntry(entry));
+        setShowEditDialog(undefined);
+    }
+
+    const onRemoveEntryEvent = (entry: Entry) => {
+        dispatch(removeEntry(entry));
+        setShowEditDialog(undefined);
     }
 
     const onAddEntryEvent = (entry: Entry) => {
@@ -109,6 +124,15 @@ const CalendarDay = (props: CalendarDayProps) => {
                 onAdd={onAddEntryEvent}
                 onClose={() => setShowCreationDialog(false)}
             />
+
+            <EditEntryDialog
+                show={showEditDialog !== undefined}
+                entry={showEditDialog!}
+                onClose={() => setShowEditDialog(undefined)}
+                onEdit={onEditEntryEvent}
+                onRemove={onRemoveEntryEvent}
+            />
+
             <StyledCardCalendar
                 className={props.className}
                 onClick={onCardClickEvent}
@@ -119,7 +143,11 @@ const CalendarDay = (props: CalendarDayProps) => {
                     </StyledHeaderContainer>
                     <StyledContentContainer>
                         {entries.map((entry, index) =>
-                            <StyledDayEntry $color={entry.color} key={index}>
+                            <StyledDayEntry
+                                $color={entry.color}
+                                key={index}
+                                onClick={(event) => onEditButtonClickEvent(event, entry)}
+                            >
                                 {entry.title}
                             </StyledDayEntry>
                         )}

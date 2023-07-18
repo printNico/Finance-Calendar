@@ -7,7 +7,7 @@ import {rgba} from "polished";
 import Card from "@/components/Basic/Card/Card";
 import Button from "@/components/Basic/Button/Button";
 import TextField from "@/components/Basic/TextField/TextField";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ColorPicker from "@/components/Basic/ColorPicker/ColorPicker";
 import {ConvertKeyToValueEnum, ConvertValueToKeyEnum, Entry, EntryAction, EntryType} from "@/lib/types/Entry";
 import NumberField from "@/components/Basic/NumberField/NumberField";
@@ -83,13 +83,15 @@ const StyledActionContainer = styled.div`
   }
 `
 
-type DialogProps = {
+type EditEntryDialogProps = {
     show: boolean;
+    entry: Entry;
     onClose?: () => void;
-    onAdd?: (entry: Entry) => void;
+    onEdit?: (entry: Entry) => void;
+    onRemove?: (entry: Entry) => void;
 }
 
-const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
+const EditEntryDialog = ({show = false, ...props}: EditEntryDialogProps) => {
     const [title, setTitle] = useState("");
     const [color, setColor] = useState("#ffff00");
     const [amount, setAmount] = useState<number>();
@@ -97,17 +99,31 @@ const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
     const [entryAction, setEntryAction] = useState<EntryAction>(EntryAction.additive);
     const [frequency, setFrequency] = useState<number>(7);
 
+    useEffect(() => {
+        if (!props.entry) return;
+
+        setTitle(props.entry.title);
+        setColor(props.entry.color);
+        setAmount(props.entry.amount);
+        setEntryType(props.entry.type);
+        setEntryAction(props.entry.action);
+        setFrequency(props.entry.frequency);
+    }, [props.entry]);
+
     const onCloseEvent = () => {
         if (props.onClose) props.onClose();
     }
 
-    const onAddEntryEvent = () => {
+    const onEditEntryEvent = () => {
         if (!title || title === "") return;
         if (!color || color === "") return;
         if (!amount || amount <= 0) return;
         if (!frequency || frequency <= 0 || frequency > 356) return;
 
         const newEntry: Entry = {
+            id: props.entry.id,
+            date: props.entry.date,
+
             title: title,
             color: color,
             amount: amount,
@@ -116,7 +132,11 @@ const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
             type: entryType,
         } as Entry;
 
-        if (props.onAdd) props.onAdd(newEntry);
+        if (props.onEdit) props.onEdit(newEntry);
+    }
+
+    const onRemoveEntryEvent = () => {
+        if (props.onRemove) props.onRemove(props.entry);
     }
 
     return (
@@ -124,7 +144,7 @@ const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
             <StyledCard>
                 <StyledContentContainer>
                     <StyledH1>
-                        Add new Entry
+                        Editing Entry
                     </StyledH1>
 
                     <StyledHr/>
@@ -179,7 +199,10 @@ const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
                             min={1}
                             max={365}
                             value={frequency}
-                            onValueChange={setFrequency}
+                            onValueChange={(value) => {
+                                setFrequency(value)
+                                console.log(value)
+                            }}
                             appends={<StyledAppendDays>Days</StyledAppendDays>}
                         />
                     )}
@@ -187,11 +210,12 @@ const AddEntryDialog = ({show = false, ...props}: DialogProps) => {
                 </StyledContentContainer>
                 <StyledActionContainer>
                     <Button label="Cancel" onClick={onCloseEvent} $outlined/>
-                    <Button label="Add" onClick={onAddEntryEvent} $primary/>
+                    <Button label="Remove" onClick={onRemoveEntryEvent} $secondary/>
+                    <Button label="Save" onClick={onEditEntryEvent} $primary/>
                 </StyledActionContainer>
             </StyledCard>
         </StyledDialog>
     )
 }
 
-export default AddEntryDialog;
+export default EditEntryDialog;

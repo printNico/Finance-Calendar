@@ -20,7 +20,7 @@ const saveToLocalStorage = (entries: Entry[]) => {
 
 const loadFromLocalStorage = (): EntriesSlice => {
     try {
-        if(typeof window === 'undefined') return {entries: []}
+        if (typeof window === 'undefined') return {entries: []}
 
         const serializedEntries = localStorage.getItem(LOCAL_STORAGE_KEY)
         if (serializedEntries === null) {
@@ -50,6 +50,12 @@ const entriesSlice = createSlice({
             state.entries.push(entry)
             saveToLocalStorage(state.entries)
         },
+        editEntry(state, action: PayloadAction<Entry>) {
+            const entry = action.payload
+            const index = state.entries.findIndex(e => e.id === entry.id)
+            state.entries[index] = entry
+            saveToLocalStorage(state.entries)
+        },
         removeEntry(state, action: PayloadAction<Entry>) {
             state.entries = state.entries.filter(entry => entry.id !== action.payload.id)
             saveToLocalStorage(state.entries)
@@ -65,5 +71,5 @@ export const selectEntriesWithDate = createSelector(
     (entries, day: DayOfMonth) => entries.filter(entry => entry.date === day.date.valueOf())
 )
 
-export const {addEntry, removeEntry} = entriesSlice.actions
+export const {addEntry, editEntry, removeEntry} = entriesSlice.actions
 export default entriesSlice.reducer
