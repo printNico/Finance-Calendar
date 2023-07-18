@@ -1,9 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
 import entriesSlice from "@/store/entriesSlice";
+import cachedMonthsSlice from "@/store/cachedMonthsSlice";
 
 export const store = configureStore({
     reducer: {
-        entries: entriesSlice
+        entries: entriesSlice,
+        cachedMonths: cachedMonthsSlice
     },
     devTools: true
 })

@@ -5,7 +5,7 @@ import FCThemeProvider from "@/lib/StyledComponents/FCThemeProvider";
 import {ReactNode} from "react";
 import FCGlobalStyle from "@/lib/StyledComponents/FCGlobalStyle";
 import TimeSelectionProvider from "@/lib/Calendar/TimeSelectionProvider";
-import ReduxStoreProvider from "@/lib/ReduxStoreProvider";
+import ReduxStoreProvider from "@/lib/utils/ReduxStoreProvider";
 
 const inter = Inter({subsets: ['latin']})
 

@@ -66,24 +66,51 @@ const entriesSlice = createSlice({
 export const selectEntriesWithDate = createSelector(
     [
         (state: RootState) => state.entries.entries,
-        (state, day: DayOfMonth) => day
+        (state, date: Date) => date
     ],
-    (entries, day: DayOfMonth) => entries.filter(entry => entry.date === day.date.valueOf())
+    (entries, date: Date) => entries.filter(entry => entry.date === date.valueOf())
 )
 
 
 export const selectRecurringEntries = createSelector(
     [
         (state: RootState) => state.entries.entries,
-        (state, day?: DayOfMonth) => day
+        (state, date?: Date) => date
     ],
-    (entries, day?: DayOfMonth) => {
+    (entries, date?: Date) => {
         return entries.filter(entry => {
             if (entry.type !== EntryType.recurring) return false;
-            if (!day) return true;
-            return entry.date <= day.date.valueOf()
+            if (!date) return true;
+            return entry.date <= date.valueOf()
         })
     }
 )
+
+export const selectEntriesOlderThan = createSelector(
+    [
+        (state: RootState) => state.entries.entries,
+        (state, date: Date) => date
+    ], (entries, date: Date) => {
+        const monthDate = new Date(date.getFullYear(), date.getMonth(), 1)
+        return entries.filter(entry => entry.date <= date.valueOf() && entry.date >= monthDate.valueOf())
+    }
+)
+
+export const selectEntriesOfMonth = createSelector(
+    [
+        (state: RootState) => state.entries.entries,
+        (state, date: Date) => date
+    ],
+    (entries, date: Date) => {
+        return entries.filter(entry => {
+            let entryDate = new Date(entry.date);
+            let entryMonth = new Date(entryDate.getFullYear(), entryDate.getMonth() + 1, 0)
+            let month = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+
+            return entryMonth.valueOf() === month.valueOf();
+        })
+    }
+)
+
 export const {addEntry, editEntry, removeEntry} = entriesSlice.actions
 export default entriesSlice.reducer

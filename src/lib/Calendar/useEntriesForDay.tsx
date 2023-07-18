@@ -5,8 +5,8 @@ import {selectEntriesWithDate, selectRecurringEntries} from "@/store/entriesSlic
 import {Entry} from "@/lib/types/Entry";
 
 const useEntriesForDay = (day: DayOfMonth) => {
-    const entries = useSelector((state: RootState) => selectEntriesWithDate(state, day));
-    const recurringEntries = useSelector((state: RootState) => selectRecurringEntries(state, day));
+    const entries = useSelector((state: RootState) => selectEntriesWithDate(state, day.date));
+    const recurringEntries = useSelector((state: RootState) => selectRecurringEntries(state, day.date));
 
     const getRelevantRecurringEntries = (recurringEntries: Entry[]): Entry[] => {
         const relevantEntries: Entry[] = [];

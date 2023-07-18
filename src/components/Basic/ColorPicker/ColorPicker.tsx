@@ -1,6 +1,6 @@
 import IconButton from "@/components/Basic/Button/IconButton";
 import TextField from "@/components/Basic/TextField/TextField";
-import useClickedOutsideEvent from "@/lib/useClickedOutsideEvent";
+import useClickedOutsideEvent from "@/lib/utils/useClickedOutsideEvent";
 import {useEffect, useRef, useState} from "react";
 import {ChromePicker, ColorResult} from 'react-color';
 import {MdColorLens} from "react-icons/md";
